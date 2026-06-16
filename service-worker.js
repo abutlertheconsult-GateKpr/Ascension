@@ -3,7 +3,7 @@
 // Caches all app files for full offline use after first load
 // ============================================================
 
-const CACHE_NAME = 'ascension-v1';
+const CACHE_NAME = 'ascension-v2';
 
 // Files to cache on install
 const ASSETS = [
