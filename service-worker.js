@@ -7,8 +7,8 @@ const CACHE_NAME = 'ascension-v1';
 
 // Files to cache on install
 const ASSETS = [
-  '/index.html',
-  '/manifest.json'
+  '/ascension-method/index.html',
+  '/ascension-method/manifest.json'
 ];
 
 // INSTALL — cache core files
