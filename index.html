@@ -2182,32 +2182,30 @@ const RISE_PATTERNS=[
   'Fear of failure','Fear of rejection','Fear of conflict','Fear of uncertainty','Perfectionism','Laziness','Avoidance','People pleasing','Discomfort with grief','Lack of confidence','Desire for immediate comfort','Distraction seeking','Indecision','Emotional avoidance'
 ];
 let riseState={taskId:null,step:0,scores:{resistance:null,impact:null,stake:null,elevation:null},patternPrimary:null,patternSecondary:null,insight:'',firstStep:'',nextAction:'',expectedBenefit:''};
-function riseBandClass(score){if(score==null)return'';if(score>=50)return'donow';if(score>=30)return'high';if(score>=13)return'medium';return'low';}
-function riseBandLabel(score){if(score==null)return'';if(score>=50)return'Critical Ascension';if(score>=30)return'High Ascension';if(score>=13)return'Moderate Ascension';return'Low Ascension';}
-function riseBandColor(score){if(score>=50)return'var(--danger)';if(score>=30)return'var(--rust)';if(score>=13)return'var(--canwait-hi)';return'var(--mid)';}
+function riseBandClass(score){if(score==null)return'';if(score>=18)return'donow';if(score>=14)return'high';if(score>=10)return'medium';return'low';}
+function riseBandLabel(score){if(score==null)return'';if(score>=18)return'Critical Ascension';if(score>=14)return'High Ascension';if(score>=10)return'Moderate Ascension';return'Low Ascension';}
+function riseBandColor(score){if(score>=18)return'var(--danger)';if(score>=14)return'var(--rust)';if(score>=10)return'var(--canwait-hi)';return'var(--mid)';}
 function riseQualifies(r,i,s,e){return r>=3&&[i,s,e].filter(v=>v>=3).length>=2;}
 function openRiseWizard(taskId){riseMode='existing';const t=S.focusTasks.find(x=>x.id===taskId);if(!t)return;riseState={taskId,step:0,scores:{resistance:t.riseScoreDetail?.resistance||null,impact:t.riseScoreDetail?.impact||null,stake:t.riseScoreDetail?.stake||null,elevation:t.riseScoreDetail?.elevation||null},patternPrimary:t.risePrimaryPattern||null,patternSecondary:t.riseSecondaryPattern||null,insight:t.riseInsight||'',firstStep:t.riseFirstStep||'',nextAction:t.riseNextAction||'',expectedBenefit:t.riseExpectedBenefit||''};riseRenderStep(0);document.getElementById('riseOverlay').classList.add('open');}
 function riseRenderStep(step){riseState.step=step;const isSummary=step===4;for(let i=0;i<4;i++){const dot=document.getElementById('risedot-'+i);if(!dot)continue;dot.className='sw-prog-dot'+(i<step?' done':i===step?' active':'');}if(step>=4){for(let i=0;i<4;i++){const dot=document.getElementById('risedot-'+i);if(dot)dot.classList.add('done');}}
   document.querySelectorAll('.rise-step').forEach(el=>el.classList.remove('active'));
   const target=document.getElementById('risestep-'+step);if(target)target.classList.add('active');
-  document.getElementById('riseActions').style.display=step<4?'flex':'none';
+  document.getElementById('riseActions').style.display='flex';
   document.getElementById('riseSummary').style.display=step===4?'block':'none';
   document.getElementById('risestep-5').style.display=step===5?'block':'none';
   document.getElementById('risestep-6').style.display=step===6?'block':'none';
-  document.getElementById('risestep-7').style.display=step===7?'block':'none';
   document.getElementById('riseBackBtn').textContent=step===0?'× Close':'← Back';
   if(step<4){const stepEl=document.getElementById('risestep-'+step);if(stepEl){stepEl.querySelectorAll('.sw-opt-btn').forEach(btn=>{btn.classList.toggle('selected',parseInt(btn.dataset.val,10)===riseState.scores[['resistance','impact','stake','elevation'][step]]);});}document.getElementById('riseNextBtn').textContent=step===3?'See Score →':'Next →';}
-  if(isSummary){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r+i+s+e;const qualifies=riseQualifies(r,i,s,e);document.getElementById('riseScoreNum').textContent=total;document.getElementById('riseScoreBand').textContent=riseBandLabel(total);document.getElementById('riseScoreBand').style.color=riseBandColor(total);const badge=document.getElementById('riseResultBadge');badge.className='score-badge '+riseBandClass(total);badge.textContent=qualifies?'✓ Ascension Task':'Standard Task';document.getElementById('riseBreakResistance').textContent=riseState.scores.resistance||'—';document.getElementById('riseBreakImpact').textContent=riseState.scores.impact||'—';document.getElementById('riseBreakStake').textContent=riseState.scores.stake||'—';document.getElementById('riseBreakElevation').textContent=riseState.scores.elevation||'—';document.getElementById('riseQualifiedSection').style.display=qualifies?'block':'none';document.getElementById('riseStandardSection').style.display=qualifies?'none':'block';document.getElementById('riseContinueBtn').style.display=qualifies?'inline-flex':'none';}
+  const nextBtn=document.getElementById('riseNextBtn');if(nextBtn){nextBtn.style.display=step<4?'inline-flex':'none';}
+  if(isSummary){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r*i*s*e;const qualifies=riseQualifies(r,i,s,e);document.getElementById('riseScoreNum').textContent=total;document.getElementById('riseScoreBand').textContent=riseBandLabel(total);document.getElementById('riseScoreBand').style.color=riseBandColor(total);const badge=document.getElementById('riseResultBadge');badge.className='score-badge '+riseBandClass(total);badge.textContent=qualifies?'✓ Ascension Task':'Standard Task';document.getElementById('riseBreakResistance').textContent=riseState.scores.resistance||'—';document.getElementById('riseBreakImpact').textContent=riseState.scores.impact||'—';document.getElementById('riseBreakStake').textContent=riseState.scores.stake||'—';document.getElementById('riseBreakElevation').textContent=riseState.scores.elevation||'—';document.getElementById('riseQualifiedSection').style.display=qualifies?'block':'none';document.getElementById('riseStandardSection').style.display=qualifies?'none':'block';document.getElementById('riseSaveStandardBtn').style.display=qualifies?'none':'inline-flex';document.getElementById('riseReviseRatingsBtn').style.display=qualifies?'none':'inline-flex';document.getElementById('riseContinueBtn').style.display=qualifies?'inline-flex':'none';}
   if(step===5){renderRisePatterns();}
   if(step===6){const insightField=document.getElementById('riseInsightField');if(insightField){insightField.value=riseState.insight||'';autoGrow(insightField);}}
-  if(step===7){const first=document.getElementById('riseFirstStep');const next=document.getElementById('riseNextAction');const benefit=document.getElementById('riseExpectedBenefit');if(first){first.value=riseState.firstStep||'';autoGrow(first);}if(next){next.value=riseState.nextAction||'';autoGrow(next);}if(benefit){benefit.value=riseState.expectedBenefit||'';autoGrow(benefit);}}
 }
 function riseToggleMore(btn){const step=btn.closest('.rise-step');if(!step)return;const list=step.querySelector('.rise-more-list');if(!list)return;const open=list.style.display==='block';list.style.display=open?'none':'block';btn.textContent=open?'+ More to consider':'- Less to consider';}
 function riseSelect(step,val){const keys=['resistance','impact','stake','elevation'];riseState.scores[keys[step]]=val;const stepEl=document.getElementById('risestep-'+step);if(stepEl){stepEl.querySelectorAll('.sw-opt-btn').forEach(btn=>{btn.classList.toggle('selected',parseInt(btn.dataset.val,10)===val);});}setTimeout(()=>riseNext(),220);}
-function riseNext(){if(riseState.step<4){const key=['resistance','impact','stake','elevation'][riseState.step];if(riseState.scores[key]==null){showToast('Select a value to continue');return;}riseRenderStep(riseState.step+1);return;} if(riseState.step===4){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const qualifies=riseQualifies(r,i,s,e);if(qualifies){riseRenderStep(5);return;}return;} if(riseState.step===5){if(!riseState.patternPrimary){showToast('Select a primary resistance pattern');return;}riseRenderStep(6);return;} if(riseState.step===6){const insightField=document.getElementById('riseInsightField');const value=insightField?insightField.value.trim():'';if(!value){showToast('Write your Ascension Insight');return;}riseState.insight=value;riseRenderStep(7);return;} if(riseState.step<7){riseRenderStep(riseState.step+1);} }
+function riseNext(){if(riseState.step<4){const key=['resistance','impact','stake','elevation'][riseState.step];if(riseState.scores[key]==null){showToast('Select a value to continue');return;}riseRenderStep(riseState.step+1);return;} if(riseState.step===4){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const qualifies=riseQualifies(r,i,s,e);if(qualifies){riseRenderStep(5);}return;} if(riseState.step===5){if(!riseState.patternPrimary){showToast('Select a primary resistance pattern');return;}riseRenderStep(6);return;} return; }
 function riseBack(){if(riseState.step===0){document.getElementById('riseOverlay').classList.remove('open');return;}riseRenderStep(riseState.step-1);}
-function renderRisePatterns(){const container=document.getElementById('risePatternList');if(!container)return;container.innerHTML='';RISE_PATTERNS.forEach(pattern=>{const chip=document.createElement('button');chip.type='button';chip.className='sw-opt-btn';chip.textContent=pattern;chip.style.minWidth='calc(50% - 6px)';chip.style.padding='10px 8px';chip.style.textAlign='left';chip.style.whiteSpace='normal';chip.style.lineHeight='1.3';chip.style.borderRadius='6px';chip.style.border='1px solid var(--rule)';const isPrimary=pattern===riseState.patternPrimary;const isSecondary=pattern===riseState.patternSecondary;if(isPrimary){chip.style.background='var(--rust)';chip.style.color='var(--white)';chip.style.borderColor='var(--rust)';}else if(isSecondary){chip.style.background='var(--canwait-bg)';chip.style.color='var(--canwait)';chip.style.borderColor='var(--canwait-hi)';}else{chip.style.background='var(--paper)';chip.style.color='var(--charcoal)';chip.style.borderColor='var(--rule)';}chip.onclick=()=>{if(riseState.patternPrimary===pattern){riseState.patternPrimary=null;} else if(riseState.patternPrimary===null){riseState.patternPrimary=pattern;} else if(riseState.patternSecondary===pattern){riseState.patternSecondary=null;} else if(riseState.patternSecondary===null){riseState.patternSecondary=pattern;} else {riseState.patternSecondary=pattern;}renderRisePatterns();};container.appendChild(chip);});}
-function riseConfirmStandard(){
+function renderRisePatterns(){const container=document.getElementById('risePatternList');if(!container)return;container.innerHTML='';RISE_PATTERNS.forEach(pattern=>{const chip=document.createElement('button');chip.type='button';chip.className='sw-opt-btn';chip.textContent=pattern;chip.style.minWidth='calc(50% - 6px)';chip.style.padding='10px 8px';chip.style.textAlign='left';chip.style.whiteSpace='normal';chip.style.lineHeight='1.3';chip.style.borderRadius='6px';chip.style.border='1px solid var(--rule)';const isPrimary=pattern===riseState.patternPrimary;const isSecondary=pattern===riseState.patternSecondary;if(isPrimary){chip.style.background='var(--rust)';chip.style.color='var(--white)';chip.style.borderColor='var(--rust)';}else if(isSecondary){chip.style.background='var(--canwait-bg)';chip.style.color='var(--canwait)';chip.style.borderColor='var(--canwait-hi)';}else{chip.style.background='var(--paper)';chip.style.color='var(--charcoal)';chip.style.borderColor='var(--rule)';}chip.onclick=()=>{if(riseState.patternPrimary===pattern){riseState.patternPrimary=null;} else if(riseState.patternPrimary===null){riseState.patternPrimary=pattern;} else if(riseState.patternSecondary===pattern){riseState.patternSecondary=null;} else if(riseState.patternSecondary===null){riseState.patternSecondary=pattern;} else {riseState.patternSecondary=pattern;}renderRisePatterns();};container.appendChild(chip);});const nextBtn=document.getElementById('risePatternNextBtn');if(nextBtn){nextBtn.style.display=riseState.patternPrimary?'inline-flex':'none';}}function riseConfirmStandard(){
   const r=riseState.scores.resistance||0;
   const i=riseState.scores.impact||0;
   const s=riseState.scores.stake||0;
@@ -2215,7 +2213,7 @@ function riseConfirmStandard(){
   if(riseMode==='new'){
     newTaskPendingRise={
       scores:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
-      score:r+i+s+e,
+      score:r*i*s*e,
       qualified:false,
       scoreDetail:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
       primaryPattern:riseState.patternPrimary||null,
@@ -2237,9 +2235,8 @@ function riseConfirmStandard(){
     showToast('Saved RISE as Standard Task');
     return;
   }
-  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2+i2+s2+e2;t.riseQualified=false;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');showToast('Saved as Standard Task');}
-function riseContinueFromSummary(){riseRenderStep(5);}
-function riseSaveTask(){const insightField=document.getElementById('riseInsightField');riseState.insight=insightField?insightField.value.trim():riseState.insight;const first=document.getElementById('riseFirstStep');const next=document.getElementById('riseNextAction');const benefit=document.getElementById('riseExpectedBenefit');riseState.firstStep=first?first.value.trim():riseState.firstStep;riseState.nextAction=next?next.value.trim():riseState.nextAction;riseState.expectedBenefit=benefit?benefit.value.trim():riseState.expectedBenefit;const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r+i+s+e;const qualifies=riseQualifies(r,i,s,e);
+  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2*i2*s2*e2;t.riseQualified=false;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');showToast('Saved as Standard Task');}
+function riseContinueFromSummary(){riseRenderStep(5);}function riseEditRatings(){riseRenderStep(3);}function risePatternNext(){if(!riseState.patternPrimary){showToast('Select a primary resistance pattern');return;}riseRenderStep(6);}function riseSaveTask(){const insightField=document.getElementById('riseInsightField');riseState.insight=insightField?insightField.value.trim():riseState.insight;const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r*i*s*e;const qualifies=riseQualifies(r,i,s,e);
   if(riseMode==='new'){
     newTaskPendingRise={
       scores:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
@@ -2266,7 +2263,7 @@ function riseSaveTask(){const insightField=document.getElementById('riseInsightF
     showToast('Ascension Task ready');
     return;
   }
-  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2+i2+s2+e2;t.riseQualified=qualifies;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');playChime('complete');showToast('Ascension Task saved');}
+  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2*i2*s2*e2;t.riseQualified=qualifies;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');playChime('complete');showToast('Ascension Task saved');}
 function riseOverlayClick(e){if(e.target===document.getElementById('riseOverlay'))document.getElementById('riseOverlay').classList.remove('open');}
 
 /* ══ RANKINGS MODAL ══ */
@@ -2638,9 +2635,10 @@ renderFE();
         This task qualifies as an Ascension Task. Choose a resistance pattern next.
       </div>
       <div id="riseStandardSection" style="display:none;margin-bottom:14px;font-family:var(--font-b);font-size:14px;color:var(--charcoal);line-height:1.6">
-        This is a Standard Task because resistance is too low or there is not enough importance, stake, or elevation.
+        This task does not qualify as an Ascension Task. Would you like to save it as a Standard Task instead?
       </div>
-      <button class="sw-confirm-btn" id="riseSaveStandardBtn" onclick="riseConfirmStandard()">Save as Standard Task</button>
+      <button class="sw-confirm-btn" id="riseSaveStandardBtn" onclick="riseConfirmStandard()">Yes, save as Standard Task</button>
+      <button class="sw-back-btn" id="riseReviseRatingsBtn" style="display:none;margin-left:8px" onclick="riseEditRatings()">No, revise ratings</button>
       <button class="sw-next-btn" id="riseContinueBtn" style="display:none;" onclick="riseContinueFromSummary()">Continue →</button>
     </div>
     <div class="sw-step rise-step" id="risestep-5" style="display:none">
@@ -2650,27 +2648,16 @@ renderFE();
         <div class="sw-step-desc">What’s really driving the avoidance? Tap your primary pattern, then optionally a secondary one.</div>
       </div>
       <div id="risePatternList" class="sw-options" style="flex-wrap:wrap;gap:6px;justify-content:flex-start"></div>
+      <button class="sw-next-btn" id="risePatternNextBtn" style="display:none;margin-top:14px" onclick="risePatternNext()">Continue →</button>
     </div>
     <div class="sw-step rise-step" id="risestep-6" style="display:none">
       <div class="sw-left">
         <div class="sw-step-num">Ascension Insight</div>
         <div class="sw-step-title">Ascension Insight</div>
-        <div class="sw-step-desc">What is the real challenge behind this task? Focus on the underlying habit or mindset, not the task itself.</div>
+        <div class="sw-step-desc">What is the real challenge behind this task? Focus on the underlying habit or mindset, not the task itself. This section is optional.</div>
       </div>
       <textarea id="riseInsightField" class="notes-area" placeholder="e.g. The challenge isn't writing the card — it's discomfort with grief and postponing acts of compassion." rows="4" style="margin-top:12px"></textarea>
-    </div>
-    <div class="sw-step rise-step" id="risestep-7" style="display:none">
-      <div class="sw-left">
-        <div class="sw-step-num">Recommended Action</div>
-        <div class="sw-step-title">Recommended Action</div>
-        <div class="sw-step-desc">Capture the smallest meaningful step, the next action, and the expected benefit.</div>
-      </div>
-      <div style="margin-top:12px">
-        <div class="reflection-q"><div class="reflection-q-num">Smallest Meaningful First Step</div><textarea id="riseFirstStep" class="notes-area" placeholder="Something you can do in 2–5 minutes" rows="3"></textarea></div>
-        <div class="reflection-q"><div class="reflection-q-num">Next Action</div><textarea id="riseNextAction" class="notes-area" placeholder="What needs to happen next" rows="3"></textarea></div>
-        <div class="reflection-q"><div class="reflection-q-num">Expected Benefit</div><textarea id="riseExpectedBenefit" class="notes-area" placeholder="What will be gained by completing this?" rows="3"></textarea></div>
-      </div>
-      <button class="sw-confirm-btn" onclick="riseSaveTask()">Save Ascension Task</button>
+      <button class="sw-confirm-btn" style="margin-top:14px" onclick="riseSaveTask()">Save Ascension Task</button>
     </div>
     <div class="sw-actions" id="riseActions" style="display:flex">
       <button class="sw-back-btn" id="riseBackBtn" onclick="riseBack()">← Back</button>
