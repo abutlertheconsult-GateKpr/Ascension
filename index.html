@@ -2166,6 +2166,9 @@ function copyAiPromptModal(){
 function openReportModal(){
   renderRiseReport();
   const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  const topResistance = [...tasks].filter(t => t.riseResistance).sort((a, b) => b.riseResistance - a.riseResistance).slice(0, 5);
+  const lowestScore = [...tasks].sort((a, b) => a.riseScore - b.riseScore).slice(0, 5);
+  const formatTask = t => `<li><strong>${escapeHtml(t.name || 'Untitled')}</strong> (Score: ${t.riseScore})</li>`; // Adjust template if needed
   const completed=tasks.filter(t=>t.completionType!=null).length;
   const openTasks=tasks.filter(t=>!t.completionType).length;
   const deadlineTasks=tasks.filter(t=>t.deadline&&t.completionType!=null);
