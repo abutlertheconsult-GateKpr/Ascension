@@ -2080,6 +2080,9 @@ function renderRiseReport(){
     return;
   }
   const monthName=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const profileLines=[];
+  if(S.settings.dob)profileLines.push(`Date of birth: ${S.settings.dob}`);
+  if(S.settings.gender)profileLines.push(`Gender: ${S.settings.gender}`);
   const profileText=profileLines.length?`Profile details: ${profileLines.join(', ')}.`:'Profile details not provided.';
   const qualified=tasks.filter(t=>t.riseQualified).length;
   const standard=tasks.length-qualified;
