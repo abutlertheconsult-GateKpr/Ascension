@@ -45,10 +45,16 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
 .sigil{width:36px;height:36px;flex-shrink:0}
 .app-title{font-family:var(--font-d);font-size:24px;letter-spacing:0.12em;color:var(--white);text-transform:uppercase;line-height:1}
 .app-sub{font-family:var(--font-o);font-size:11px;font-weight:300;letter-spacing:0.26em;color:var(--rust-hi);text-transform:uppercase;margin-top:2px}
-.header-quote{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);font-family:var(--font-b);font-size:13px;font-style:italic;color:rgba(255,255,255,0.65);line-height:1.6}
-.header-quote span{display:block;font-style:normal;font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.55);margin-top:3px;font-family:var(--font-o);font-weight:300}
-
-/* STATS STRIP */
+  .header-quote{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);font-family:var(--font-b);font-size:13px;font-style:italic;color:rgba(255,255,255,0.65);line-height:1.6;display:flex;flex-direction:column;gap:8px}
+  .header-quote-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .header-quote-text{flex:1;}
+  .header-settings-btn{background:none;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.85);font-size:18px;line-height:1;width:42px;height:42px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s}
+  .header-settings-btn:hover{border-color:rgba(255,255,255,0.35);color:#fff;transform:scale(1.03)}
+  .header-quote span{display:block;font-style:normal;font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.55);margin-top:0;font-family:var(--font-o);font-weight:300}
+  .settings-label,.settings-toggle{display:block;font-family:var(--font-o);font-size:12px;color:var(--charcoal);margin-bottom:10px}
+  .settings-label input,.settings-label select{width:100%;margin-top:6px;padding:9px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--off-white);color:var(--black);font-family:var(--font-o);font-size:13px}
+  .settings-toggle input{margin-right:8px}
+  .settings-import-note{font-family:var(--font-o);font-size:11px;color:var(--mid);margin-top:8px}
 .stats-strip{display:flex;align-items:stretch;background:var(--paper);border-bottom:1px solid var(--rule)}
 .stat-block{flex:1;padding:10px 8px;text-align:center;border-right:1px solid var(--rule)}
 .stat-block:last-child{border-right:none}
@@ -437,6 +443,32 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
 .dpc-bar-fill{height:100%;transition:width 0.5s}
 .dash-phase-card.resist .dpc-bar-fill{background:var(--rust)}.dash-phase-card.grow .dpc-bar-fill{background:var(--grow)}.dash-phase-card.momentum .dpc-bar-fill{background:var(--momentum)}
 .dash-overall{padding:14px;border:2px solid var(--black);background:var(--paper);margin-bottom:12px}
+.dash-report-panel{margin-top:14px;padding:14px;border:1px solid var(--rule);background:var(--off-white)}
+.dash-report-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dash-btn{padding:9px 12px;background:var(--black);color:var(--white);border:none;font-family:var(--font-o);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:all 0.14s}
+.dash-btn:hover{background:var(--rust)}
+.dash-report-summary{font-family:var(--font-b);font-size:14px;color:var(--charcoal);line-height:1.6;padding:9px 0}
+.dash-report-details{margin-top:12px}
+.dash-report-chart{margin-top:14px;padding:12px 10px 4px;border:1px solid var(--rule);background:var(--paper)}
+.dash-report-chart .chart-left{display:flex;gap:10px;align-items:flex-end}
+.dash-report-chart .chart-y-labels{display:flex;flex-direction:column;justify-content:space-between;height:140px;font-family:var(--font-o);font-size:11px;color:var(--ash);letter-spacing:0.14em;line-height:1.2}
+.dash-report-chart .chart-bars{flex:1;display:flex;align-items:flex-end;gap:8px;padding:0 2px;min-height:140px}
+.dash-report-chart .chart-bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.dash-report-chart .chart-bar-fill{width:100%;background:var(--rust);border-radius:6px 6px 0 0;min-height:16px;transition:height 0.3s ease}
+.dash-report-chart .chart-bar-label{font-family:var(--font-o);font-size:11px;color:var(--ash);text-align:center}
+.dash-report-chart .chart-x-axis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;font-family:var(--font-o);font-size:11px;color:var(--mid);text-align:center}
+.dash-report-chart .chart-x-label{word-break:break-word}
+.dash-report-chart .chart-empty{font-family:var(--font-o);font-size:12px;color:var(--ash);padding:18px 12px;text-align:center}
+.dash-report-panel .dash-report-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dash-report-panel .dash-report-actions .dash-btn{flex:1 1 auto}
+.dash-modal-report{display:grid;gap:14px}
+.dash-modal-section{padding:12px 0;border-bottom:1px solid var(--rule)}
+.dash-modal-section:last-child{border-bottom:none}
+.dash-modal-list{list-style:none;padding:0;margin:0}
+.dash-modal-list li{margin-bottom:10px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);font-family:var(--font-o);font-size:13px;line-height:1.45}
+.dash-modal-metric{display:flex;justify-content:space-between;gap:12px;font-family:var(--font-b);font-size:13px;color:var(--charcoal)}
+.dash-modal-metric span{display:inline-block}
+.modal-textarea{width:100%;min-height:160px;border:1px solid var(--rule);border-radius:8px;padding:12px;font-family:var(--font-o);font-size:13px;color:var(--charcoal);resize:vertical;background:var(--white)}
 .do-title{font-family:var(--font-d);font-size:17px;letter-spacing:0.11em;color:var(--black);text-transform:uppercase;margin-bottom:10px;border-bottom:1px solid var(--rule);padding-bottom:7px}
 .do-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .do-stat{text-align:center;padding:9px;background:var(--white);border:1px solid var(--rule)}
@@ -531,7 +563,10 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
     </div>
   </div>
   <div class="header-quote">
-    The one watching the wind will not sow seed, and the one looking at the clouds will not reap.
+    <div class="header-quote-row">
+      <div class="header-quote-text">The one watching the wind will not sow seed, and the one looking at the clouds will not reap.</div>
+      <button class="header-settings-btn" onclick="openSettingsModal()" title="Settings">⚙</button>
+    </div>
     <span>— Ecclesiastes 11:4</span>
   </div>
 </header>
@@ -549,7 +584,7 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
   <button class="nav-btn active" onclick="switchView('dashboard',this)">Dashboard</button>
   <button class="nav-btn" id="nav-focus" onclick="switchView('focus',this)">Focus</button>
   <button class="nav-btn" onclick="switchView('today',this)">Today</button>
-  <button class="nav-btn" onclick="switchView('reflect',this)">Reflect</button>
+  <button class="nav-btn" id="nav-reflect" onclick="switchView('reflect',this)">Reflect</button>
   <button class="nav-btn" onclick="switchView('library',this)">Library</button>
   <button class="nav-btn" onclick="switchView('archive',this)">Archive</button>
 </nav>
@@ -724,6 +759,22 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
     </div>
     <div class="do-insight" id="dashInsight">Start sealing tasks to see your performance insights.</div>
     <div class="do-deadline-insight" id="dashDeadlineInsight"></div>
+    <div class="dash-report-panel">
+      <div class="do-title">Resistance Pattern Report</div>
+      <div class="dash-report-summary" id="dashRiseReportSummary">Your Resistance report will appear here once you score tasks with RISE.</div>
+      <div class="dash-report-chart" id="dashPatternChart">
+        <div class="chart-left">
+          <div class="chart-y-labels"><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+          <div class="chart-bars" id="dashPatternChartBars"></div>
+        </div>
+        <div class="chart-x-axis" id="dashPatternChartLabels"></div>
+      </div>
+      <div class="dash-report-actions">
+        <button class="dash-btn" onclick="renderRiseReport()">Refresh Report</button>
+        <button class="dash-btn" onclick="generateAiPrompt()">Generate AI Prompt</button>
+        <button class="dash-btn" onclick="openReportModal()">View Report</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -784,6 +835,100 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
     <button class="tef-submit" onclick="saveEditFocusTask()">Save Changes</button>
   </div>
 </div>
+
+<!-- AI PROMPT MODAL -->
+<div class="modal-overlay" id="aiPromptModal" onclick="closeAiPromptModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span>AI Prompt</span><button class="modal-close" onclick="closeAiPromptModalDirect()">×</button></div>
+    <div class="dash-modal-metric" id="aiPromptModalMetrics"></div>
+    <textarea id="aiPromptModalText" class="modal-textarea" readonly></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="dash-btn" onclick="copyAiPromptModal()">Copy Prompt</button>
+      <button class="dash-btn" onclick="closeAiPromptModalDirect()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span>Settings</span><button class="modal-close" onclick="closeSettingsModalDirect()">×</button></div>
+    <div class="dash-modal-section">
+      <div class="do-title">Profile</div>
+      <label class="settings-label">Date of Birth<input id="settingsDob" type="date" class="settings-input"/></label>
+      <label class="settings-label">Gender<select id="settingsGender" class="settings-input"><option value="">Prefer not to say</option><option value="Female">Female</option><option value="Male">Male</option><option value="Non-binary">Non-binary</option><option value="Other">Other</option></select></label>
+    </div>
+    <div class="dash-modal-section">
+      <div class="do-title">Notifications</div>
+      <label class="settings-toggle"><input type="checkbox" id="settingsWeeklyBackup"/> Weekly data backup reminder</label>
+      <label class="settings-toggle"><input type="checkbox" id="settingsMonthlyReport"/> Monthly report summary</label>
+    </div>
+    <div class="dash-modal-section">
+      <div class="do-title">Data</div>
+      <button class="dash-btn" onclick="exportAppData()">Export Data</button>
+      <button class="dash-btn" onclick="triggerImportData()">Import Data</button>
+      <div class="settings-import-note">Import replaces current local data.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap">
+      <button class="dash-btn" onclick="saveSettings()">Save Settings</button>
+      <button class="dash-btn" onclick="closeSettingsModalDirect()">Close</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="settingsImportInput" accept="application/json" style="display:none" onchange="handleSettingsImport(event)" />
+
+<!-- BACKUP PROMPT MODAL -->
+<div class="modal-overlay" id="backupPromptModal" onclick="closeBackupPromptModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span>Backup Reminder</span><button class="modal-close" onclick="closeBackupPromptModalDirect()">×</button></div>
+    <div class="dash-modal-section">
+      <div class="do-title">Weekly Backup</div>
+      <div class="dash-modal-report">It’s the start of a new week. Keep your data safe by exporting a backup file now.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap">
+      <button class="dash-btn" onclick="backupNow()">Backup Now</button>
+      <button class="dash-btn" onclick="remindLater()">Remind Me Later</button>
+      <button class="dash-btn" onclick="closeBackupPromptModalDirect()">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT VIEW MODAL -->
+<div class="modal-overlay" id="reportModal" onclick="closeReportModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span>RISE Report</span><button class="modal-close" onclick="closeReportModalDirect()">×</button></div>
+    <div class="dash-report-chart dash-report-chart-modal" id="reportModalChart">
+      <div class="chart-left">
+        <div class="chart-y-labels"><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        <div class="chart-bars" id="reportModalChartBars"></div>
+      </div>
+      <div class="chart-x-axis" id="reportModalChartLabels"></div>
+    </div>
+    <div class="dash-modal-report" id="reportModalContent"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="dash-btn" onclick="closeReportModalDirect()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- MONTHLY SUMMARY MODAL -->
+<div class="modal-overlay" id="monthlySummaryModal" onclick="closeMonthlySummaryModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span>Monthly Summary</span><button class="modal-close" onclick="closeMonthlySummaryModalDirect()">×</button></div>
+    <div class="dash-modal-metric" id="monthlySummaryMetrics"></div>
+    <div class="dash-modal-report" id="monthlySummaryContent"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="dash-btn" onclick="openReflectFromModal()">Review Reflect</button>
+      <button class="dash-btn" onclick="closeMonthlySummaryModalDirect()">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ══ AUDIO ══ */
 function createAudioCtx(){try{return new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}
@@ -827,14 +972,14 @@ function freshFocusTask(name,deadline,quadrant){
 }
 
 function loadState(){
-  const def={streak:0,lastCompletedDate:null,daysActive:[],days:{},library:{},feSessions:{},feSessionsDate:null,focusTasks:[],focusArchive:[]};
+  const def={streak:0,lastCompletedDate:null,lastMonthlySummary:null,daysActive:[],days:{},library:{},feSessions:{},feSessionsDate:null,focusTasks:[],focusArchive:[],settings:{dob:'',gender:'',weeklyBackupPrompt:true,monthlySummaryPrompt:true,lastWeeklyPrompt:null}};
   try{
     const raw=localStorage.getItem('ascension_v4');
     if(!raw)return def;
     const p=JSON.parse(raw);
     if(!p.days)p.days={};if(!p.library)p.library={};if(!p.feSessions)p.feSessions={};
     if(!p.focusTasks)p.focusTasks=[];if(!p.focusArchive)p.focusArchive=[];
-    if(!p.daysActive)p.daysActive=[];if(p.streak==null)p.streak=0;
+    if(!p.daysActive)p.daysActive=[];if(p.streak==null)p.streak=0;if(!p.lastMonthlySummary)p.lastMonthlySummary=null;if(!p.settings)p.settings={dob:'',gender:'',weeklyBackupPrompt:true,monthlySummaryPrompt:true,lastWeeklyPrompt:null};
     Object.keys(p.days).forEach(dk=>{
       const day=p.days[dk];
       if(!day||!day.taskIds){p.days[dk]=freshDay();return;}
@@ -1919,7 +2064,274 @@ function renderDashboard(){
     dlInsight='Set deadlines on your Focus tasks to track whether you finish on time.';
   }
   document.getElementById('dashDeadlineInsight').textContent=dlInsight;
+  renderRiseReport();
 }
+
+function renderRiseReport(){
+  const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  const summaryEl=document.getElementById('dashRiseReportSummary');
+  const chartBarsEl=document.getElementById('dashPatternChartBars');
+  const chartLabelsEl=document.getElementById('dashPatternChartLabels');
+  if(!summaryEl||!chartBarsEl||!chartLabelsEl){return;}
+  if(tasks.length===0){
+    summaryEl.textContent='No RISE-scored tasks yet. Complete RISE on focus tasks to generate a resistance report.';
+    chartBarsEl.innerHTML='<div class="chart-empty">No resistance pattern data yet.</div>';
+    chartLabelsEl.innerHTML='';
+    return;
+  }
+  const monthName=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const profileLines=[];
+  if(S.settings.dob)profileLines.push(`Date of birth: ${S.settings.dob}`);
+  if(S.settings.gender)profileLines.push(`Gender: ${S.settings.gender}`);
+  const profileText=profileLines.length?`Profile details: ${profileLines.join(', ')}.`:'Profile details not provided.';
+  const qualified=tasks.filter(t=>t.riseQualified).length;
+  const standard=tasks.length-qualified;
+  const avg=Math.round(tasks.reduce((sum,t)=>(sum+(t.riseScore||0)),0)/tasks.length);
+  const patternCounts={};
+  tasks.forEach(t=>{if(t.risePrimaryPattern){patternCounts[t.risePrimaryPattern]=(patternCounts[t.risePrimaryPattern]||0)+1;} if(t.riseSecondaryPattern){patternCounts[t.riseSecondaryPattern]=(patternCounts[t.riseSecondaryPattern]||0)+1;}});
+  const sortedPatterns=Object.entries(patternCounts).sort((a,b)=>b[1]-a[1]);
+  const chartItems=sortedPatterns.slice(0,5);
+  const topPatterns=sortedPatterns.slice(0,3);
+  const topResistance=tasks.filter(t=>t.riseScoreDetail?.resistance!=null).sort((a,b)=>b.riseScoreDetail.resistance-a.riseScoreDetail.resistance).slice(0,3);
+  const lowestScore=tasks.slice().sort((a,b)=>(a.riseScore||0)-(b.riseScore||0)).slice(0,3);
+  const maxCount=chartItems.length?Math.max(...chartItems.map(([,count])=>count),1):1;
+  summaryEl.innerHTML=`<strong>${monthName} Resistance Report</strong><br>${tasks.length} scored task${tasks.length===1?'':'s'} · ${qualified} Ascension · ${standard} Standard · average RISE score ${avg}.<br>${escapeHtml(profileText)}`;
+  chartBarsEl.innerHTML=chartItems.length===0?'<div class="chart-empty">No resistance patterns selected.</div>':chartItems.map(([pattern,count])=>`<div class="chart-bar"><div class="chart-bar-fill" style="height:${Math.round((count/maxCount)*100)}%"></div><div class="chart-bar-label">${count}</div></div>`).join('');
+  chartLabelsEl.innerHTML=chartItems.map(([pattern])=>`<div class="chart-x-label">${escapeHtml(pattern)}</div>`).join('');
+  const formatTask=(t)=>{
+    const resistance=t.riseScoreDetail?.resistance!=null?`Resistance ${t.riseScoreDetail.resistance}`:'Resistance —';
+    const pattern=t.risePrimaryPattern?`Primary: ${t.risePrimaryPattern}`:'';
+    return `<div class="dash-report-task"><strong>${escapeHtml(t.name||'Untitled task')}</strong><div>${resistance} · Score ${t.riseScore||0}${pattern?` · ${escapeHtml(pattern)}`:''}</div></div>`;
+  };
+  let detailHtml='';
+  // Remove the dashboard "Top Resistance Patterns" section as requested.
+  detailHtml+=`<div class="dash-report-pattern"><div class="dash-report-pattern-title">Highest Resistance Tasks</div>${topResistance.map(formatTask).join('')}</div>`;
+  detailHtml+=`<div class="dash-report-pattern"><div class="dash-report-pattern-title">Lowest RISE Score Tasks</div>${lowestScore.map(formatTask).join('')}</div>`;
+}
+
+function generateAiPrompt(){
+  const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  if(tasks.length===0){showToast('Score tasks with RISE before generating a prompt.');return;}
+  const monthName=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const patternCounts={};
+  tasks.forEach(t=>{if(t.risePrimaryPattern){patternCounts[t.risePrimaryPattern]=(patternCounts[t.risePrimaryPattern]||0)+1;} if(t.riseSecondaryPattern){patternCounts[t.riseSecondaryPattern]=(patternCounts[t.riseSecondaryPattern]||0)+1;}});
+  const sortedPatterns=Object.entries(patternCounts).sort((a,b)=>b[1]-a[1]);
+  const patternSummary=sortedPatterns.length>0?sortedPatterns.slice(0,3).map(([p,c])=>`${p} (${c})`).join(', '):'No resistance patterns selected yet.';
+  const profileLines=[];
+  if(S.settings.dob)profileLines.push(`Date of birth: ${S.settings.dob}`);
+  if(S.settings.gender)profileLines.push(`Gender: ${S.settings.gender}`);
+  const profileSummary=profileLines.length?`Profile details:\n- ${profileLines.join('\n- ')}\n\n`:'Profile details: not provided.\n\n';
+  const completed=tasks.filter(t=>t.completionType!=null).length;
+  const openTasks=tasks.filter(t=>!t.completionType).length;
+  const deadlineTasks=tasks.filter(t=>t.deadline&&t.completionType!=null);
+  const onTime=deadlineTasks.filter(t=>new Date(t.modifiedAt)<=new Date(t.deadline+'T23:59:59')).length;
+  const lastMinute=deadlineTasks.filter(t=>{
+    const modified=new Date(t.modifiedAt).getTime();
+    const deadlineEnd=new Date(t.deadline+'T23:59:59').getTime();
+    return modified<=deadlineEnd && modified>=deadlineEnd-86400000;
+  }).length;
+  const insightEntries=tasks.filter(t=>t.riseInsight&&t.riseInsight.trim()).map(t=>{
+    const date=new Date(t.modifiedAt||t.createdAt);
+    const dateLabel=isNaN(date.getTime())?'Unknown date':date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `- ${dateLabel}: ${t.name||'Unnamed task'} — ${t.riseInsight.trim()}`;
+  });
+  const tasksSummary=tasks.map(t=>{
+    const r=t.riseScoreDetail?.resistance!=null?`R${t.riseScoreDetail.resistance}`:'R?';
+    const i=t.riseScoreDetail?.impact!=null?`I${t.riseScoreDetail.impact}`:'I?';
+    const s=t.riseScoreDetail?.stake!=null?`S${t.riseScoreDetail.stake}`:'S?';
+    const e=t.riseScoreDetail?.elevation!=null?`E${t.riseScoreDetail.elevation}`:'E?';
+    const pattern=t.risePrimaryPattern?`Primary: ${t.risePrimaryPattern}`:'Primary: none';
+    const deadline=t.deadline?`Deadline ${t.deadline}`:'No deadline';
+    const completedText=t.completionType?`Completed (${t.completionType})`:'Open';
+    return `- ${t.name||'Untitled task'} | score ${t.riseScore||0} | ${r}, ${i}, ${s}, ${e} | ${pattern} | ${deadline} | ${completedText}`;
+  }).join('\n');
+  const prompt=`You are a productivity coach. I scored ${tasks.length} focus tasks in ${monthName} using the RISE method. The most frequent resistance patterns are: ${patternSummary}.\n\nMetrics:\n- Open tasks: ${openTasks}\n- Completed tasks: ${completed}\n- Deadlined completed tasks: ${deadlineTasks.length}\n- On time: ${onTime}\n- Last-minute: ${lastMinute}\n\nInsights by date:\n${insightEntries.length?insightEntries.join('\n'): 'No insights recorded yet.'}\n\nPlease summarize the resistance trends, identify the biggest contributors, recommend a simple action plan for reducing resistance and improving task completion, and include a short daily focus suggestion based on this RISE data.\n\nTask details:\n${tasksSummary}`;
+  const modalText=document.getElementById('aiPromptModalText');
+  const modalMetrics=document.getElementById('aiPromptModalMetrics');
+  if(modalText){modalText.value=prompt;}
+  if(modalMetrics){modalMetrics.innerHTML=`<span>Open: ${openTasks}</span><span>Completed: ${completed}</span><span>Deadlined: ${deadlineTasks.length}</span><span>On time: ${onTime}</span><span>Last-minute: ${lastMinute}</span>`;}
+  document.getElementById('aiPromptModal').classList.add('open');
+}
+
+function copyAiPromptModal(){
+  const promptArea=document.getElementById('aiPromptModalText');
+  if(!promptArea||!promptArea.value){showToast('No prompt available to copy.');return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(promptArea.value).then(()=>showToast('AI prompt copied to clipboard.')).catch(()=>showToast('Could not copy prompt.'));
+  } else {
+    promptArea.select(); document.execCommand('copy'); showToast('AI prompt copied to clipboard.');
+  }
+}
+
+function openReportModal(){
+  renderRiseReport();
+  const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  const completed=tasks.filter(t=>t.completionType!=null).length;
+  const openTasks=tasks.filter(t=>!t.completionType).length;
+  const deadlineTasks=tasks.filter(t=>t.deadline&&t.completionType!=null);
+  const onTime=deadlineTasks.filter(t=>new Date(t.modifiedAt)<=new Date(t.deadline+'T23:59:59')).length;
+  const lastMinute=deadlineTasks.filter(t=>{
+    const modified=new Date(t.modifiedAt).getTime();
+    const deadlineEnd=new Date(t.deadline+'T23:59:59').getTime();
+    return modified<=deadlineEnd && modified>=deadlineEnd-86400000;
+  }).length;
+  const profileLines=[];
+  if(S.settings.dob)profileLines.push(`Date of birth: ${escapeHtml(S.settings.dob)}`);
+  if(S.settings.gender)profileLines.push(`Gender: ${escapeHtml(S.settings.gender)}`);
+  const profileHtml=profileLines.length?`<div class="dash-modal-section"><div class="do-title">Profile</div><div class="dash-modal-report">${profileLines.join('<br>')}</div></div>`:'';
+  const patternCounts={};
+  tasks.forEach(t=>{if(t.risePrimaryPattern){patternCounts[t.risePrimaryPattern]=(patternCounts[t.risePrimaryPattern]||0)+1;} if(t.riseSecondaryPattern){patternCounts[t.riseSecondaryPattern]=(patternCounts[t.riseSecondaryPattern]||0)+1;}});
+  const sortedPatterns=Object.entries(patternCounts).sort((a,b)=>b[1]-a[1]);
+  const chartItems=sortedPatterns.slice(0,5);
+  const maxCount=chartItems.length?Math.max(...chartItems.map(([,count])=>count),1):1;
+  const chartBars=document.getElementById('reportModalChartBars');
+  const chartLabels=document.getElementById('reportModalChartLabels');
+  if(chartBars&&chartLabels){
+    chartBars.innerHTML=chartItems.length===0?'<div class="chart-empty">No resistance patterns selected.</div>':chartItems.map(([pattern,count])=>`<div class="chart-bar"><div class="chart-bar-fill" style="height:${Math.round((count/maxCount)*100)}%"></div><div class="chart-bar-label">${count}</div></div>`).join('');
+    chartLabels.innerHTML=chartItems.map(([pattern])=>`<div class="chart-x-label">${escapeHtml(pattern)}</div>`).join('');
+  }
+  const insightEntries=tasks.filter(t=>t.riseInsight&&t.riseInsight.trim()).map(t=>{
+    const date=new Date(t.modifiedAt||t.createdAt);
+    const dateLabel=isNaN(date.getTime())?'Unknown date':date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<li>${escapeHtml(dateLabel)} — <strong>${escapeHtml(t.name||'Untitled task')}</strong><br>${escapeHtml(t.riseInsight.trim())}</li>`;
+  }).join('');
+  const summaryHtml=`
+    <div class="dash-modal-section">
+      <div class="do-title">Report Summary</div>
+      <div class="dash-modal-metric"><span>Scored tasks</span><span>${tasks.length}</span></div>
+      <div class="dash-modal-metric"><span>Ascension tasks</span><span>${tasks.filter(t=>t.riseQualified).length}</span></div>
+      <div class="dash-modal-metric"><span>Standard tasks</span><span>${tasks.filter(t=>!t.riseQualified).length}</span></div>
+      <div class="dash-modal-metric"><span>Average RISE score</span><span>${tasks.length?Math.round(tasks.reduce((sum,t)=>(sum+(t.riseScore||0)),0)/tasks.length):0}</span></div>
+    </div>
+  `;
+  const patternsHtml=sortedPatterns.length>0?`<div class="dash-modal-section"><div class="do-title">Top Resistance Patterns</div><ul class="dash-modal-list">${sortedPatterns.slice(0,5).map(([pattern,count])=>`<li>${escapeHtml(pattern)} — ${count} task${count===1?'':'s'}</li>`).join('')}</ul></div>`:'<div class="dash-modal-section"><div class="do-title">Top Resistance Patterns</div><div class="chart-empty">No resistance patterns recorded yet.</div></div>';
+  const topResistanceHtml=topResistance.length>0?`<div class="dash-modal-section"><div class="do-title">Highest Resistance Tasks</div>${topResistance.map(formatTask).join('')}</div>`:'<div class="dash-modal-section"><div class="do-title">Highest Resistance Tasks</div><div class="chart-empty">No resistance-rated tasks yet.</div></div>';
+  const lowestScoreHtml=lowestScore.length>0?`<div class="dash-modal-section"><div class="do-title">Lowest RISE Score Tasks</div>${lowestScore.map(formatTask).join('')}</div>`:'<div class="dash-modal-section"><div class="do-title">Lowest RISE Score Tasks</div><div class="chart-empty">No scored tasks yet.</div></div>';
+  const insightsHtml=`<div class="dash-modal-section"><div class="do-title">Insights</div><ul class="dash-modal-list">${insightEntries||'<li>No insights recorded yet.</li>'}</ul></div>`;
+  const reportHtml=`
+    ${profileHtml}
+    ${summaryHtml}
+    <div class="dash-modal-section">
+      <div class="do-title">Report Metrics</div>
+      <div class="dash-modal-metric"><span>Open tasks</span><span>${openTasks}</span></div>
+      <div class="dash-modal-metric"><span>Completed tasks</span><span>${completed}</span></div>
+      <div class="dash-modal-metric"><span>Deadline completions</span><span>${deadlineTasks.length}</span></div>
+      <div class="dash-modal-metric"><span>On time</span><span>${onTime}</span></div>
+      <div class="dash-modal-metric"><span>Last-minute</span><span>${lastMinute}</span></div>
+    </div>
+    ${patternsHtml}
+    ${topResistanceHtml}
+    ${lowestScoreHtml}
+    ${insightsHtml}
+  `;
+  document.getElementById('reportModalContent').innerHTML=reportHtml;
+  document.getElementById('reportModal').classList.add('open');
+}
+
+function closeAiPromptModal(e){if(e.target===document.getElementById('aiPromptModal'))document.getElementById('aiPromptModal').classList.remove('open');}
+function closeAiPromptModalDirect(){document.getElementById('aiPromptModal').classList.remove('open');}
+function closeReportModal(e){if(e.target===document.getElementById('reportModal'))document.getElementById('reportModal').classList.remove('open');}
+function closeReportModalDirect(){document.getElementById('reportModal').classList.remove('open');}
+
+function getCurrentMonthKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function getCurrentWeekKey(){const d=new Date();const day=d.getDay();const diff=d.getDate() - day + (day===0?-6:1);const weekStart=new Date(d.setDate(diff));return weekStart.getFullYear()+'-'+String(weekStart.getMonth()+1).padStart(2,'0')+'-'+String(weekStart.getDate()).padStart(2,'0');}
+function closeMonthlySummaryModal(e){if(e.target===document.getElementById('monthlySummaryModal'))document.getElementById('monthlySummaryModal').classList.remove('open');}
+function closeMonthlySummaryModalDirect(){document.getElementById('monthlySummaryModal').classList.remove('open');}
+function openSettingsModal(){loadSettingsToForm();document.getElementById('settingsModal').classList.add('open');}
+function closeSettingsModal(e){if(e.target===document.getElementById('settingsModal'))document.getElementById('settingsModal').classList.remove('open');}
+function closeSettingsModalDirect(){document.getElementById('settingsModal').classList.remove('open');}
+function loadSettingsToForm(){document.getElementById('settingsDob').value=S.settings.dob||'';document.getElementById('settingsGender').value=S.settings.gender||'';document.getElementById('settingsWeeklyBackup').checked=Boolean(S.settings.weeklyBackupPrompt);document.getElementById('settingsMonthlyReport').checked=Boolean(S.settings.monthlySummaryPrompt);} 
+function saveSettings(){S.settings.dob=document.getElementById('settingsDob').value;S.settings.gender=document.getElementById('settingsGender').value;S.settings.weeklyBackupPrompt=document.getElementById('settingsWeeklyBackup').checked;S.settings.monthlySummaryPrompt=document.getElementById('settingsMonthlyReport').checked;saveState();showToast('Settings saved');closeSettingsModalDirect();}
+function exportAppData(){const data=JSON.stringify(S,null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ascension-method-data.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('Data exported');}
+function triggerImportData(){document.getElementById('settingsImportInput').click();}
+function handleSettingsImport(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(){try{const imported=JSON.parse(reader.result);if(imported&&typeof imported==='object'){S=imported;S.settings=S.settings||{dob:'',gender:'',weeklyBackupPrompt:true,monthlySummaryPrompt:true,lastWeeklyPrompt:null};saveState();renderStats();renderDashboard();syncAllTriangle();syncFromState('resist');showToast('Data imported');closeSettingsModalDirect();}else{showToast('Invalid import file');}}catch(err){showToast('Import failed');}};reader.readAsText(file);}
+function openBackupPromptModal(){document.getElementById('backupPromptModal').classList.add('open');}
+function closeBackupPromptModal(e){if(e.target===document.getElementById('backupPromptModal'))document.getElementById('backupPromptModal').classList.remove('open');}
+function closeBackupPromptModalDirect(){document.getElementById('backupPromptModal').classList.remove('open');}
+function backupNow(){exportAppData();const weekKey=getCurrentWeekKey();S.settings.lastWeeklyPrompt=weekKey;saveState();closeBackupPromptModalDirect();}
+function remindLater(){const weekKey=getCurrentWeekKey();S.settings.lastWeeklyPrompt=weekKey;saveState();closeBackupPromptModalDirect();}
+function checkWeeklyBackupPrompt(){const weekKey=getCurrentWeekKey();const today=new Date();const monday=today.getDay()===1; if(!S.settings.weeklyBackupPrompt||S.settings.lastWeeklyPrompt===weekKey||!monday) return; S.settings.lastWeeklyPrompt=weekKey; saveState(); openBackupPromptModal();}
+function checkMonthlySummary(){if(!S.settings.monthlySummaryPrompt) return;const monthKey=getCurrentMonthKey();if(S.lastMonthlySummary!==monthKey)openMonthlySummaryModal();}
+function closeMonthlySummaryModalDirect(){document.getElementById('monthlySummaryModal').classList.remove('open');}
+function openReflectFromModal(){closeMonthlySummaryModalDirect();const btn=document.getElementById('nav-reflect');switchView('reflect',btn);}
+function openMonthlySummaryModal(){
+  const currentMonth=getCurrentMonthKey();
+  const monthName=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  const totalScored=tasks.length;
+  const avgScore=totalScored?Math.round(tasks.reduce((sum,t)=>(sum+(t.riseScore||0)),0)/totalScored):0;
+  const avgResistance=totalScored?Math.round(tasks.reduce((sum,t)=>(sum+(t.riseScoreDetail?.resistance||0)),0)/totalScored):0;
+  const completed=tasks.filter(t=>t.completionType!=null).length;
+  const openTasks=tasks.filter(t=>!t.completionType).length;
+  const deadlineTasks=tasks.filter(t=>t.deadline&&t.completionType!=null);
+  const onTime=deadlineTasks.filter(t=>new Date(t.modifiedAt)<=new Date(t.deadline+'T23:59:59')).length;
+  const lastMinute=deadlineTasks.filter(t=>{
+    const modified=new Date(t.modifiedAt).getTime();
+    const deadlineEnd=new Date(t.deadline+'T23:59:59').getTime();
+    return modified<=deadlineEnd && modified>=deadlineEnd-86400000;
+  }).length;
+  const patternCounts={};
+  tasks.forEach(t=>{if(t.risePrimaryPattern){patternCounts[t.risePrimaryPattern]=(patternCounts[t.risePrimaryPattern]||0)+1;} if(t.riseSecondaryPattern){patternCounts[t.riseSecondaryPattern]=(patternCounts[t.riseSecondaryPattern]||0)+1;}});
+  const topPatterns=Object.entries(patternCounts).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const insightEntries=tasks.filter(t=>t.riseInsight&&t.riseInsight.trim()).map(t=>{
+    const date=new Date(t.modifiedAt||t.createdAt);
+    const dateLabel=isNaN(date.getTime())?'Unknown date':date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<li>${escapeHtml(dateLabel)} — ${escapeHtml(t.riseInsight.trim())}</li>`;
+  }).join('');
+  const todayKey=getTodayKey();
+  const todayReflection=S.days[todayKey]?.reflection;
+  const recentReflects=Object.entries(S.days).filter(([k,d])=>d.reflection&&d.reflection.saved).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,3);
+  const reflectHtml=recentReflects.length?recentReflects.map(([k,d])=>{
+    const date=new Date(k+'T12:00:00');
+    const label=date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<div class="dash-modal-section"><div class="do-title">${escapeHtml(label)} Reflection</div>${d.reflection.q1?`<div class="dash-modal-metric"><span>Hardest part</span><span>${escapeHtml(d.reflection.q1)}</span></div>`:''}${d.reflection.q2?`<div class="dash-modal-metric"><span>What helped</span><span>${escapeHtml(d.reflection.q2)}</span></div>`:''}${d.reflection.q3?`<div class="dash-modal-metric"><span>Lighten tomorrow</span><span>${escapeHtml(d.reflection.q3)}</span></div>`:''}</div>`;
+  }).join(''): '<div class="dash-modal-section"><div class="do-title">Reflection Review</div><div class="chart-empty">No sealed reflections found yet. Head to Reflect to capture today’s end-of-day review.</div></div>';
+  const metricsHtml=`<span>${escapeHtml(monthName)}</span><span>Scored ${totalScored}</span><span>Avg RISE ${avgScore}</span><span>Avg Resistance ${avgResistance}</span><span>Completed ${completed}</span><span>Open ${openTasks}</span>`;
+  const patternsHtml=topPatterns.length?`<ul class="dash-modal-list">${topPatterns.map(([pattern,count])=>`<li>${escapeHtml(pattern)} — ${count}</li>`).join('')}</ul>`:'<div class="chart-empty">No resistance patterns logged yet.</div>';
+  const insightHtml=insightEntries||'<div class="chart-empty">No RISE insights recorded yet.</div>';
+  const contentHtml=`
+    <div class="dash-modal-section"><div class="do-title">Monthly Averages</div><div class="dash-modal-metric"><span>Average RISE score</span><span>${avgScore}</span></div><div class="dash-modal-metric"><span>Average resistance</span><span>${avgResistance}</span></div><div class="dash-modal-metric"><span>Deadline success</span><span>${deadlineTasks.length?Math.round((onTime/deadlineTasks.length)*100):0}%</span></div><div class="dash-modal-metric"><span>Last-minute completions</span><span>${lastMinute}</span></div></div>
+    <div class="dash-modal-section"><div class="do-title">Insights</div>${insightHtml}</div>
+    <div class="dash-modal-section"><div class="do-title">Top Resistance Patterns</div>${patternsHtml}</div>
+    ${reflectHtml}
+  `;
+  document.getElementById('monthlySummaryMetrics').innerHTML=metricsHtml;
+  document.getElementById('monthlySummaryContent').innerHTML=contentHtml;
+  document.getElementById('monthlySummaryModal').classList.add('open');
+  S.lastMonthlySummary=currentMonth;
+  saveState();
+}
+function checkMonthlySummary(){const monthKey=getCurrentMonthKey();if(S.lastMonthlySummary!==monthKey)openMonthlySummaryModal();}
+
+function printMonthlyReport(){
+  const tasks=S.focusTasks.filter(t=>t.riseScore!=null);
+  const monthName=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const summaryLines=[];
+  if(tasks.length===0){
+    summaryLines.push('<p>No RISE-scored tasks available for this month.</p>');
+  } else {
+    const qualified=tasks.filter(t=>t.riseQualified).length;
+    const avg=Math.round(tasks.reduce((sum,t)=>(sum+(t.riseScore||0)),0)/tasks.length);
+    const patternCounts={};
+    tasks.forEach(t=>{if(t.risePrimaryPattern){patternCounts[t.risePrimaryPattern]=(patternCounts[t.risePrimaryPattern]||0)+1;} if(t.riseSecondaryPattern){patternCounts[t.riseSecondaryPattern]=(patternCounts[t.riseSecondaryPattern]||0)+1;}});
+    const sortedPatterns=Object.entries(patternCounts).sort((a,b)=>b[1]-a[1]);
+    summaryLines.push(`<p>${tasks.length} scored tasks · ${qualified} Ascension · ${tasks.length-qualified} Standard · average RISE score ${avg}.</p>`);
+    if(sortedPatterns.length>0){ summaryLines.push('<p>Top resistance patterns: '+sortedPatterns.slice(0,5).map(([p,c])=>`${escapeHtml(p)} (${c})`).join(', ')+'</p>'); }
+  }
+  const rows=tasks.map(t=>{
+    const r=t.riseScoreDetail?.resistance!=null?t.riseScoreDetail.resistance:'–';
+    const i=t.riseScoreDetail?.impact!=null?t.riseScoreDetail.impact:'–';
+    const s=t.riseScoreDetail?.stake!=null?t.riseScoreDetail.stake:'–';
+    const e=t.riseScoreDetail?.elevation!=null?t.riseScoreDetail.elevation:'–';
+    return `<tr><td>${escapeHtml(t.name||'Untitled')}</td><td>${t.riseScore||0}</td><td>${r}</td><td>${i}</td><td>${s}</td><td>${e}</td><td>${escapeHtml(t.risePrimaryPattern||'')}</td><td>${escapeHtml(t.riseSecondaryPattern||'')}</td></tr>`;
+  }).join('');
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>${monthName} RISE Monthly Report</title><style>body{font-family:Arial,sans-serif;color:#111;margin:24px;}h1,h2{margin-bottom:0.2em;}table{border-collapse:collapse;width:100%;margin-top:16px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;font-size:13px;}th{background:#f4f4f4;}p{margin:0.5em 0;}</style></head><body><h1>${monthName} RISE Monthly Report</h1>${summaryLines.join('')}<table><thead><tr><th>Task</th><th>Score</th><th>R</th><th>I</th><th>S</th><th>E</th><th>Primary Pattern</th><th>Secondary Pattern</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  const win=window.open('','_blank');
+  if(!win){showToast('Unable to open print window.');return;}
+  win.document.write(html); win.document.close(); win.focus(); win.print();
+}
+
+function escapeHtml(text){return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 /* ══ CALENDAR ══ */
 function renderCalendar(){
@@ -2396,6 +2808,8 @@ function autoGrowAll(){document.querySelectorAll('textarea').forEach(t=>{if(t.va
 
 renderStats();
 renderDashboard();
+checkMonthlySummary();
+checkWeeklyBackupPrompt();
 syncAllTriangle();
 syncFromState('resist');
 setTimeout(autoGrowAll, 100);
