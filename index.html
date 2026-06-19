@@ -297,6 +297,7 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
 .ftask-btn.warn-btn{border-color:var(--canwait-hi);color:var(--canwait)}.ftask-btn.warn-btn:hover{background:var(--canwait-hi);color:var(--white)}
 
 .ftask-btn.score-btn{border-color:var(--charcoal);color:var(--charcoal)}.ftask-btn.score-btn:hover{background:var(--charcoal);color:var(--white)}
+.ftask-btn.rise-btn{border-color:var(--danger);color:var(--danger)}.ftask-btn.rise-btn:hover{background:var(--danger);color:var(--white)}
 /* SCORE BADGE */
 .score-badge{display:inline-flex;align-items:center;padding:1px 5px;font-family:var(--font-o);font-size:10px;font-weight:600;letter-spacing:0.07em;border:1px solid var(--rule);margin-left:5px;vertical-align:middle;flex-shrink:0}
 .score-badge.donow{background:rgba(192,57,43,0.1);border-color:var(--danger);color:var(--danger)}
@@ -304,10 +305,10 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
 .score-badge.medium{background:rgba(180,140,20,0.1);border-color:var(--canwait-hi);color:var(--canwait)}
 .score-badge.low{background:var(--paper);border-color:var(--rule);color:var(--mid)}
 /* SCORING WIZARD */
-.sw-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:910;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.24s}
-.sw-overlay.open{opacity:1;pointer-events:all}
-.sw-modal{width:100%;max-width:480px;margin:0 auto;background:var(--white);border-top:3px solid var(--rust);transform:translateY(100%);transition:transform 0.34s cubic-bezier(.16,1,.3,1)}
-.sw-overlay.open .sw-modal{transform:translateY(0)}
+.sw-overlay,.rise-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:910;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.24s}
+.sw-overlay.open,.rise-overlay.open{opacity:1;pointer-events:all}
+.sw-modal,.rise-modal{width:100%;max-width:480px;margin:0 auto;background:var(--white);border-top:3px solid var(--rust);transform:translateY(100%);transition:transform 0.34s cubic-bezier(.16,1,.3,1)}
+.sw-overlay.open .sw-modal,.rise-overlay.open .rise-modal{transform:translateY(0)}
 .sw-progress{display:flex;gap:3px;padding:13px 16px 0}
 .sw-prog-dot{flex:1;height:3px;background:var(--rule);transition:background 0.2s}
 .sw-prog-dot.active{background:var(--rust)}.sw-prog-dot.done{background:var(--charcoal)}
@@ -317,6 +318,9 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
 .sw-step-num{font-family:var(--font-o);font-size:10px;font-weight:600;letter-spacing:0.2em;color:var(--rust);text-transform:uppercase;margin-bottom:3px}
 .sw-step-title{font-family:var(--font-d);font-size:22px;letter-spacing:0.1em;color:var(--black);text-transform:uppercase;margin-bottom:7px;line-height:1}
 .sw-step-desc{font-family:var(--font-b);font-size:14px;color:var(--ash);line-height:1.65;font-style:italic}
+.sw-step-desc .main-questions{color:var(--danger);font-weight:700}
+.rise-more-block{display:flex;flex-direction:column;align-items:flex-end;margin-top:10px}
+.rise-more-block .rise-more-list{max-width:78%;text-align:right}
 .sw-scale-anchors{display:flex;justify-content:space-between;font-family:var(--font-o);font-size:10px;font-weight:400;letter-spacing:0.08em;color:var(--mid);text-transform:uppercase;margin-top:4px;padding:0 2px}
 .sw-options{display:flex;flex-direction:row;gap:4px;width:100%;margin-top:14px}
 .sw-opt-btn{padding:8px 0;border:1px solid var(--rule);background:var(--paper);font-family:var(--font-d);font-size:19px;letter-spacing:0.04em;color:var(--charcoal);cursor:pointer;text-align:center;transition:all 0.14s;flex:1}
@@ -614,6 +618,11 @@ body{font-family:var(--font-b);background:var(--off-white);color:var(--black);mi
       <button class="tef-q-btn" id="tef-mustdo" onclick="selectQuadrant('mustdo')">Must Do<br><span style="font-size:7px;font-weight:300;letter-spacing:0">External consequence</span></button>
       <button class="tef-q-btn" id="tef-shoulddo" onclick="selectQuadrant('shoulddo')">Should Do<br><span style="font-size:7px;font-weight:300;letter-spacing:0">Growth / internal</span></button>
       <button class="tef-q-btn" id="tef-canwait" onclick="selectQuadrant('canwait')">Can Wait<br><span style="font-size:7px;font-weight:300;letter-spacing:0">Delegate or drop</span></button>
+    </div>
+    <button class="tef-score-toggle" id="tefRiseToggle" onclick="openRiseWizardForNew()">☆ RISE this task (optional)</button>
+    <div class="tef-score-preview" id="tefRisePreview">
+      <div class="tef-score-preview-num" id="tefRiseNum">—</div>
+      <div class="tef-score-preview-band" id="tefRiseBand"></div>
     </div>
     <button class="tef-score-toggle" id="tefScoreToggle" onclick="openScoreWizardForNew()">◎ Score this task (optional)</button>
     <div class="tef-score-preview" id="tefScorePreview">
@@ -1489,6 +1498,7 @@ function completeFETask(){
 let selectedQuadrant=null;
 let editFocusId=null;let editQuadrant=null;
 let newTaskPendingScore={scores:[null,null,null,null]};
+let newTaskPendingRise={scores:{resistance:null,impact:null,stake:null,elevation:null},score:null,qualified:false,scoreDetail:null,primaryPattern:null,secondaryPattern:null,insight:'',firstStep:'',nextAction:'',expectedBenefit:''};
 
 function selectQuadrant(q){
   selectedQuadrant=selectedQuadrant===q?null:q;
@@ -1511,17 +1521,33 @@ function submitFocusTask(){
     task.score=newTaskPendingScore.score;
     task.scoreDetail=newTaskPendingScore.scoreDetail;
   }
+  if(newTaskPendingRise.score!=null){
+    task.riseScore=newTaskPendingRise.score;
+    task.riseQualified=newTaskPendingRise.qualified;
+    task.riseScoreDetail=newTaskPendingRise.scoreDetail;
+    task.risePrimaryPattern=newTaskPendingRise.primaryPattern;
+    task.riseSecondaryPattern=newTaskPendingRise.secondaryPattern;
+    task.riseInsight=newTaskPendingRise.insight;
+    task.riseFirstStep=newTaskPendingRise.firstStep;
+    task.riseNextAction=newTaskPendingRise.nextAction;
+    task.riseExpectedBenefit=newTaskPendingRise.expectedBenefit;
+  }
   S.focusTasks.push(task);saveState();
   // Reset form
   document.getElementById('tefName').value='';
   document.getElementById('tefDate').value='';
   selectedQuadrant=null;
   newTaskPendingScore={scores:[null,null,null,null]};
+  newTaskPendingRise={scores:{resistance:null,impact:null,stake:null,elevation:null},score:null,qualified:false,scoreDetail:null,primaryPattern:null,secondaryPattern:null,insight:'',firstStep:'',nextAction:'',expectedBenefit:''};
   ['mustdo','shoulddo','canwait'].forEach(x=>{const btn=document.getElementById('tef-'+x);if(btn)btn.className='tef-q-btn';});
-  const toggle=document.getElementById('tefScoreToggle');
-  if(toggle){toggle.textContent='◎ Score this task (optional)';toggle.className='tef-score-toggle';}
-  const preview=document.getElementById('tefScorePreview');
-  if(preview)preview.classList.remove('visible');
+  const scoreToggle=document.getElementById('tefScoreToggle');
+  if(scoreToggle){scoreToggle.textContent='◎ Score this task (optional)';scoreToggle.className='tef-score-toggle';}
+  const scorePreview=document.getElementById('tefScorePreview');
+  if(scorePreview)scorePreview.classList.remove('visible');
+  const riseToggle=document.getElementById('tefRiseToggle');
+  if(riseToggle){riseToggle.textContent='☆ RISE this task (optional)';riseToggle.className='tef-score-toggle';}
+  const risePreview=document.getElementById('tefRisePreview');
+  if(risePreview)risePreview.classList.remove('visible');
   renderFocusTasks();showToast('Task added to '+QUADRANT_LABELS[task.quadrant]);
 }
 function renderFocusTasks(){
@@ -1560,10 +1586,12 @@ function buildFocusTaskCard(t){
   const inProgHtml=t.inProgress?'<div class="ftask-inprogress">▶ In Progress: '+escHtml(t.inProgress)+'</div>':'';
   const timeHtml=t.totalSecondsSpent?'<div style="font-family:var(--font-o);font-size:9px;color:var(--ash);margin-bottom:4px">⏱ Time spent: '+formatTimeSpent(t.totalSecondsSpent)+'</div>':'';
   const scoreBadge=t.score!=null?'<span class="score-badge '+scoreBandClass(t.score)+'">'+t.score+'</span>':'';
-  let actionsHtml='<div class="ftask-actions" id="fa-'+t.id+'" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)">'
+  const riseBadge=t.riseScore!=null?'<span class="score-badge '+riseBandClass(t.riseScore)+'">'+(t.riseQualified?('RISE '+t.riseScore):('RISE '+t.riseScore+' · Std'))+'</span>':'';
+  let actionsHtml='<div class="ftask-actions" id="fa-'+t.id+'" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)">' 
     +'<button class="ftask-btn send" onclick="openSendPopover(\''+t.id+'\')">Send to Today</button>'
     +'<button class="ftask-btn" data-taskname="'+escAttr(t.name)+'" data-cardid="fc-'+t.id+'" onclick="focusBtnClick(this)">Focus</button>'
     +'<button class="ftask-btn score-btn" onclick="openScoreWizard(\''+t.id+'\')">Score</button>'
+    +'<button class="ftask-btn rise-btn" onclick="openRiseWizard(\''+t.id+'\')">RISE</button>'
     +'<button class="ftask-btn" onclick="openEditFocusTask(\''+t.id+'\')">Edit</button>';
   if(t.quadrant==='canwait'){
     actionsHtml+='<button class="ftask-btn warn-btn" onclick="openCanWaitPicker(\''+t.id+'\')">Complete</button>';
@@ -1587,7 +1615,7 @@ function buildFocusTaskCard(t){
     +'</div></div>';
   card.innerHTML=
     '<div class="ftask-card-top" onclick="toggleFocusCard(\''+t.id+'\')" style="cursor:pointer">'
-    +'<div class="ftask-name">'+escHtml(t.name)+scoreBadge+'</div>'
+    +'<div class="ftask-name">'+escHtml(t.name)+scoreBadge+riseBadge+'</div>'
     +'<div style="font-size:14px;color:var(--mid);line-height:1" id="fcarrow-'+t.id+'">▾</div>'
     +'</div>'
     +dlHtml+inProgHtml+timeHtml+actionsHtml+sendPop+cwPick;
@@ -2049,12 +2077,25 @@ function scoreBandColor(s){
   return'var(--mid)';
 }
 let swMode='existing'; // 'existing' or 'new'
+let riseMode='existing'; // 'existing' or 'new'
 
 function openScoreWizardForNew(){
   swMode='new';
   swState={taskId:null,step:0,scores:[null,null,null,null]};
   swRenderStep(0);
   document.getElementById('swOverlay').classList.add('open');
+}
+
+function openRiseWizardForNew(){
+  riseMode='new';
+  riseState={taskId:null,step:0,scores:{
+    resistance:newTaskPendingRise.scores.resistance,
+    impact:newTaskPendingRise.scores.impact,
+    stake:newTaskPendingRise.scores.stake,
+    elevation:newTaskPendingRise.scores.elevation
+  },patternPrimary:newTaskPendingRise.primaryPattern,patternSecondary:newTaskPendingRise.secondaryPattern,insight:newTaskPendingRise.insight||'',firstStep:newTaskPendingRise.firstStep||'',nextAction:newTaskPendingRise.nextAction||'',expectedBenefit:newTaskPendingRise.expectedBenefit||''};
+  riseRenderStep(0);
+  document.getElementById('riseOverlay').classList.add('open');
 }
 
 function openScoreWizard(taskId){
@@ -2136,6 +2177,97 @@ function swConfirm(){
   }
 }
 function swOverlayClick(e){if(e.target===document.getElementById('swOverlay'))document.getElementById('swOverlay').classList.remove('open');}
+
+const RISE_PATTERNS=[
+  'Fear of failure','Fear of rejection','Fear of conflict','Fear of uncertainty','Perfectionism','Laziness','Avoidance','People pleasing','Discomfort with grief','Lack of confidence','Desire for immediate comfort','Distraction seeking','Indecision','Emotional avoidance'
+];
+let riseState={taskId:null,step:0,scores:{resistance:null,impact:null,stake:null,elevation:null},patternPrimary:null,patternSecondary:null,insight:'',firstStep:'',nextAction:'',expectedBenefit:''};
+function riseBandClass(score){if(score==null)return'';if(score>=50)return'donow';if(score>=30)return'high';if(score>=13)return'medium';return'low';}
+function riseBandLabel(score){if(score==null)return'';if(score>=50)return'Critical Ascension';if(score>=30)return'High Ascension';if(score>=13)return'Moderate Ascension';return'Low Ascension';}
+function riseBandColor(score){if(score>=50)return'var(--danger)';if(score>=30)return'var(--rust)';if(score>=13)return'var(--canwait-hi)';return'var(--mid)';}
+function riseQualifies(r,i,s,e){return r>=3&&[i,s,e].filter(v=>v>=3).length>=2;}
+function openRiseWizard(taskId){riseMode='existing';const t=S.focusTasks.find(x=>x.id===taskId);if(!t)return;riseState={taskId,step:0,scores:{resistance:t.riseScoreDetail?.resistance||null,impact:t.riseScoreDetail?.impact||null,stake:t.riseScoreDetail?.stake||null,elevation:t.riseScoreDetail?.elevation||null},patternPrimary:t.risePrimaryPattern||null,patternSecondary:t.riseSecondaryPattern||null,insight:t.riseInsight||'',firstStep:t.riseFirstStep||'',nextAction:t.riseNextAction||'',expectedBenefit:t.riseExpectedBenefit||''};riseRenderStep(0);document.getElementById('riseOverlay').classList.add('open');}
+function riseRenderStep(step){riseState.step=step;const isSummary=step===4;for(let i=0;i<4;i++){const dot=document.getElementById('risedot-'+i);if(!dot)continue;dot.className='sw-prog-dot'+(i<step?' done':i===step?' active':'');}if(step>=4){for(let i=0;i<4;i++){const dot=document.getElementById('risedot-'+i);if(dot)dot.classList.add('done');}}
+  document.querySelectorAll('.rise-step').forEach(el=>el.classList.remove('active'));
+  const target=document.getElementById('risestep-'+step);if(target)target.classList.add('active');
+  document.getElementById('riseActions').style.display=step<4?'flex':'none';
+  document.getElementById('riseSummary').style.display=step===4?'block':'none';
+  document.getElementById('risestep-5').style.display=step===5?'block':'none';
+  document.getElementById('risestep-6').style.display=step===6?'block':'none';
+  document.getElementById('risestep-7').style.display=step===7?'block':'none';
+  document.getElementById('riseBackBtn').textContent=step===0?'× Close':'← Back';
+  if(step<4){const stepEl=document.getElementById('risestep-'+step);if(stepEl){stepEl.querySelectorAll('.sw-opt-btn').forEach(btn=>{btn.classList.toggle('selected',parseInt(btn.dataset.val,10)===riseState.scores[['resistance','impact','stake','elevation'][step]]);});}document.getElementById('riseNextBtn').textContent=step===3?'See Score →':'Next →';}
+  if(isSummary){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r+i+s+e;const qualifies=riseQualifies(r,i,s,e);document.getElementById('riseScoreNum').textContent=total;document.getElementById('riseScoreBand').textContent=riseBandLabel(total);document.getElementById('riseScoreBand').style.color=riseBandColor(total);const badge=document.getElementById('riseResultBadge');badge.className='score-badge '+riseBandClass(total);badge.textContent=qualifies?'✓ Ascension Task':'Standard Task';document.getElementById('riseBreakResistance').textContent=riseState.scores.resistance||'—';document.getElementById('riseBreakImpact').textContent=riseState.scores.impact||'—';document.getElementById('riseBreakStake').textContent=riseState.scores.stake||'—';document.getElementById('riseBreakElevation').textContent=riseState.scores.elevation||'—';document.getElementById('riseQualifiedSection').style.display=qualifies?'block':'none';document.getElementById('riseStandardSection').style.display=qualifies?'none':'block';document.getElementById('riseContinueBtn').style.display=qualifies?'inline-flex':'none';}
+  if(step===5){renderRisePatterns();}
+  if(step===6){const insightField=document.getElementById('riseInsightField');if(insightField){insightField.value=riseState.insight||'';autoGrow(insightField);}}
+  if(step===7){const first=document.getElementById('riseFirstStep');const next=document.getElementById('riseNextAction');const benefit=document.getElementById('riseExpectedBenefit');if(first){first.value=riseState.firstStep||'';autoGrow(first);}if(next){next.value=riseState.nextAction||'';autoGrow(next);}if(benefit){benefit.value=riseState.expectedBenefit||'';autoGrow(benefit);}}
+}
+function riseToggleMore(btn){const step=btn.closest('.rise-step');if(!step)return;const list=step.querySelector('.rise-more-list');if(!list)return;const open=list.style.display==='block';list.style.display=open?'none':'block';btn.textContent=open?'+ More to consider':'- Less to consider';}
+function riseSelect(step,val){const keys=['resistance','impact','stake','elevation'];riseState.scores[keys[step]]=val;const stepEl=document.getElementById('risestep-'+step);if(stepEl){stepEl.querySelectorAll('.sw-opt-btn').forEach(btn=>{btn.classList.toggle('selected',parseInt(btn.dataset.val,10)===val);});}setTimeout(()=>riseNext(),220);}
+function riseNext(){if(riseState.step<4){const key=['resistance','impact','stake','elevation'][riseState.step];if(riseState.scores[key]==null){showToast('Select a value to continue');return;}riseRenderStep(riseState.step+1);return;} if(riseState.step===4){const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const qualifies=riseQualifies(r,i,s,e);if(qualifies){riseRenderStep(5);return;}return;} if(riseState.step===5){if(!riseState.patternPrimary){showToast('Select a primary resistance pattern');return;}riseRenderStep(6);return;} if(riseState.step===6){const insightField=document.getElementById('riseInsightField');const value=insightField?insightField.value.trim():'';if(!value){showToast('Write your Ascension Insight');return;}riseState.insight=value;riseRenderStep(7);return;} if(riseState.step<7){riseRenderStep(riseState.step+1);} }
+function riseBack(){if(riseState.step===0){document.getElementById('riseOverlay').classList.remove('open');return;}riseRenderStep(riseState.step-1);}
+function renderRisePatterns(){const container=document.getElementById('risePatternList');if(!container)return;container.innerHTML='';RISE_PATTERNS.forEach(pattern=>{const chip=document.createElement('button');chip.type='button';chip.className='sw-opt-btn';chip.textContent=pattern;chip.style.minWidth='calc(50% - 6px)';chip.style.padding='10px 8px';chip.style.textAlign='left';chip.style.whiteSpace='normal';chip.style.lineHeight='1.3';chip.style.borderRadius='6px';chip.style.border='1px solid var(--rule)';const isPrimary=pattern===riseState.patternPrimary;const isSecondary=pattern===riseState.patternSecondary;if(isPrimary){chip.style.background='var(--rust)';chip.style.color='var(--white)';chip.style.borderColor='var(--rust)';}else if(isSecondary){chip.style.background='var(--canwait-bg)';chip.style.color='var(--canwait)';chip.style.borderColor='var(--canwait-hi)';}else{chip.style.background='var(--paper)';chip.style.color='var(--charcoal)';chip.style.borderColor='var(--rule)';}chip.onclick=()=>{if(riseState.patternPrimary===pattern){riseState.patternPrimary=null;} else if(riseState.patternPrimary===null){riseState.patternPrimary=pattern;} else if(riseState.patternSecondary===pattern){riseState.patternSecondary=null;} else if(riseState.patternSecondary===null){riseState.patternSecondary=pattern;} else {riseState.patternSecondary=pattern;}renderRisePatterns();};container.appendChild(chip);});}
+function riseConfirmStandard(){
+  const r=riseState.scores.resistance||0;
+  const i=riseState.scores.impact||0;
+  const s=riseState.scores.stake||0;
+  const e=riseState.scores.elevation||0;
+  if(riseMode==='new'){
+    newTaskPendingRise={
+      scores:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
+      score:r+i+s+e,
+      qualified:false,
+      scoreDetail:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
+      primaryPattern:riseState.patternPrimary||null,
+      secondaryPattern:riseState.patternSecondary||null,
+      insight:riseState.insight||'',
+      firstStep:riseState.firstStep||'',
+      nextAction:riseState.nextAction||'',
+      expectedBenefit:riseState.expectedBenefit||''
+    };
+    document.getElementById('riseOverlay').classList.remove('open');
+    const riseToggle=document.getElementById('tefRiseToggle');
+    if(riseToggle){riseToggle.textContent='★ RISE ready: '+newTaskPendingRise.score;riseToggle.className='tef-score-toggle scored';}
+    const risePreview=document.getElementById('tefRisePreview');
+    if(risePreview){risePreview.classList.add('visible');}
+    const riseNum=document.getElementById('tefRiseNum');
+    const riseBand=document.getElementById('tefRiseBand');
+    if(riseNum){riseNum.textContent=newTaskPendingRise.score;}
+    if(riseBand){riseBand.textContent=riseBandLabel(newTaskPendingRise.score);riseBand.style.color=riseBandColor(newTaskPendingRise.score);}
+    showToast('Saved RISE as Standard Task');
+    return;
+  }
+  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2+i2+s2+e2;t.riseQualified=false;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');showToast('Saved as Standard Task');}
+function riseContinueFromSummary(){riseRenderStep(5);}
+function riseSaveTask(){const insightField=document.getElementById('riseInsightField');riseState.insight=insightField?insightField.value.trim():riseState.insight;const first=document.getElementById('riseFirstStep');const next=document.getElementById('riseNextAction');const benefit=document.getElementById('riseExpectedBenefit');riseState.firstStep=first?first.value.trim():riseState.firstStep;riseState.nextAction=next?next.value.trim():riseState.nextAction;riseState.expectedBenefit=benefit?benefit.value.trim():riseState.expectedBenefit;const r=riseState.scores.resistance||0;const i=riseState.scores.impact||0;const s=riseState.scores.stake||0;const e=riseState.scores.elevation||0;const total=r+i+s+e;const qualifies=riseQualifies(r,i,s,e);
+  if(riseMode==='new'){
+    newTaskPendingRise={
+      scores:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
+      score:total,
+      qualified:qualifies,
+      scoreDetail:{resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation},
+      primaryPattern:riseState.patternPrimary||null,
+      secondaryPattern:riseState.patternSecondary||null,
+      insight:riseState.insight||'',
+      firstStep:riseState.firstStep||'',
+      nextAction:riseState.nextAction||'',
+      expectedBenefit:riseState.expectedBenefit||''
+    };
+    document.getElementById('riseOverlay').classList.remove('open');
+    const riseToggle=document.getElementById('tefRiseToggle');
+    if(riseToggle){riseToggle.textContent='★ RISE ready: '+newTaskPendingRise.score;riseToggle.className='tef-score-toggle scored';}
+    const risePreview=document.getElementById('tefRisePreview');
+    if(risePreview){risePreview.classList.add('visible');}
+    const riseNum=document.getElementById('tefRiseNum');
+    const riseBand=document.getElementById('tefRiseBand');
+    if(riseNum){riseNum.textContent=newTaskPendingRise.score;}
+    if(riseBand){riseBand.textContent=riseBandLabel(newTaskPendingRise.score);riseBand.style.color=riseBandColor(newTaskPendingRise.score);}
+    playChime('complete');
+    showToast('Ascension Task ready');
+    return;
+  }
+  const t=S.focusTasks.find(x=>x.id===riseState.taskId);if(!t)return;const r2=riseState.scores.resistance||0;const i2=riseState.scores.impact||0;const s2=riseState.scores.stake||0;const e2=riseState.scores.elevation||0;t.riseScore=r2+i2+s2+e2;t.riseQualified=qualifies;t.riseScoreDetail={resistance:riseState.scores.resistance,impact:riseState.scores.impact,stake:riseState.scores.stake,elevation:riseState.scores.elevation};t.risePrimaryPattern=riseState.patternPrimary||null;t.riseSecondaryPattern=riseState.patternSecondary||null;t.riseInsight=riseState.insight||'';t.riseFirstStep=riseState.firstStep||'';t.riseNextAction=riseState.nextAction||'';t.riseExpectedBenefit=riseState.expectedBenefit||'';t.modifiedAt=new Date().toISOString();saveState();renderFocusTasks();document.getElementById('riseOverlay').classList.remove('open');playChime('complete');showToast('Ascension Task saved');}
+function riseOverlayClick(e){if(e.target===document.getElementById('riseOverlay'))document.getElementById('riseOverlay').classList.remove('open');}
 
 /* ══ RANKINGS MODAL ══ */
 function openRankings(){
@@ -2391,6 +2523,158 @@ renderFE();
     <div class="sw-actions" id="swActions">
       <button class="sw-back-btn" onclick="swBack()">← Back</button>
       <button class="sw-next-btn" id="swNextBtn" onclick="swNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RISE SCORING WIZARD MODAL -->
+<div class="rise-overlay" id="riseOverlay" onclick="riseOverlayClick(event)">
+  <div class="rise-modal">
+    <div class="sw-progress">
+      <div class="sw-prog-dot active" id="risedot-0"></div>
+      <div class="sw-prog-dot" id="risedot-1"></div>
+      <div class="sw-prog-dot" id="risedot-2"></div>
+      <div class="sw-prog-dot" id="risedot-3"></div>
+    </div>
+    <div class="sw-step active rise-step" id="risestep-0">
+      <div class="sw-left">
+        <div class="sw-step-num">Step 1 of 4 — Resistance</div>
+        <div class="sw-step-title">Resistance</div>
+        <div class="sw-step-desc">How strongly are you avoiding this task?<br><br><strong>1</strong> — Low resistance<br><strong>3</strong> — Moderate resistance<br><strong>5</strong> — High resistance<br><br><span class="main-questions">Main questions:</span> Am I avoiding or postponing this? Do I feel discomfort, anxiety, or friction?</div>
+      </div>
+      <div class="rise-more-block">
+        <button class="sw-back-btn rise-more-btn" type="button" onclick="riseToggleMore(this)">+ More to consider</button>
+        <div class="rise-more-list" style="display:none;font-family:var(--font-b);font-size:13px;color:var(--ash);line-height:1.6">
+          Have I postponed multiple times? Am I choosing distractions? Does fear or uncertainty come up? Do I feel dread or boredom?
+        </div>
+      </div>
+      <div class="sw-options">
+        <button class="sw-opt-btn" data-val="1" onclick="riseSelect(0,1)">1</button>
+        <button class="sw-opt-btn" data-val="2" onclick="riseSelect(0,2)">2</button>
+        <button class="sw-opt-btn" data-val="3" onclick="riseSelect(0,3)">3</button>
+        <button class="sw-opt-btn" data-val="4" onclick="riseSelect(0,4)">4</button>
+        <button class="sw-opt-btn" data-val="5" onclick="riseSelect(0,5)">5</button>
+      </div>
+      <div class="sw-scale-anchors"><span>No resistance</span><span>Extreme resistance</span></div>
+    </div>
+    <div class="sw-step rise-step" id="risestep-1">
+      <div class="sw-left">
+        <div class="sw-step-num">Step 2 of 4 — Impact</div>
+        <div class="sw-step-title">Impact</div>
+        <div class="sw-step-desc">How important is this task?<br><br><strong>1</strong> — Low importance<br><strong>3</strong> — Moderate importance<br><strong>5</strong> — High importance<br><br><span class="main-questions">Main questions:</span> Does this matter? Does it support a responsibility, commitment, value, or goal?</div>
+      </div>
+      <div class="rise-more-block">
+        <button class="sw-back-btn rise-more-btn" type="button" onclick="riseToggleMore(this)">+ More to consider</button>
+        <div class="rise-more-list" style="display:none;font-family:var(--font-b);font-size:13px;color:var(--ash);line-height:1.6">
+          Will this matter in 30 days? In 1 year? Does it affect relationships, health, finances, or long-term goals?
+        </div>
+      </div>
+      <div class="sw-options">
+        <button class="sw-opt-btn" data-val="1" onclick="riseSelect(1,1)">1</button>
+        <button class="sw-opt-btn" data-val="2" onclick="riseSelect(1,2)">2</button>
+        <button class="sw-opt-btn" data-val="3" onclick="riseSelect(1,3)">3</button>
+        <button class="sw-opt-btn" data-val="4" onclick="riseSelect(1,4)">4</button>
+        <button class="sw-opt-btn" data-val="5" onclick="riseSelect(1,5)">5</button>
+      </div>
+      <div class="sw-scale-anchors"><span>Low importance</span><span>High importance</span></div>
+    </div>
+    <div class="sw-step rise-step" id="risestep-2">
+      <div class="sw-left">
+        <div class="sw-step-num">Step 3 of 4 — Stake</div>
+        <div class="sw-step-title">Stake</div>
+        <div class="sw-step-desc">What is the cost of delay?<br><br><strong>1</strong> — Low cost<br><strong>3</strong> — Moderate cost<br><strong>5</strong> — High cost<br><br><span class="main-questions">Main questions:</span> Is there a cost to continued delay? Will avoiding this create consequences or missed opportunities?</div>
+      </div>
+      <div class="rise-more-block">
+        <button class="sw-back-btn rise-more-btn" type="button" onclick="riseToggleMore(this)">+ More to consider</button>
+        <div class="rise-more-list" style="display:none;font-family:var(--font-b);font-size:13px;color:var(--ash);line-height:1.6">
+          Does the problem compound? Will it cause more effort later? Is there relationship damage or missed opportunity?
+        </div>
+      </div>
+      <div class="sw-options">
+        <button class="sw-opt-btn" data-val="1" onclick="riseSelect(2,1)">1</button>
+        <button class="sw-opt-btn" data-val="2" onclick="riseSelect(2,2)">2</button>
+        <button class="sw-opt-btn" data-val="3" onclick="riseSelect(2,3)">3</button>
+        <button class="sw-opt-btn" data-val="4" onclick="riseSelect(2,4)">4</button>
+        <button class="sw-opt-btn" data-val="5" onclick="riseSelect(2,5)">5</button>
+      </div>
+      <div class="sw-scale-anchors"><span>Minimal cost</span><span>Serious consequences</span></div>
+    </div>
+    <div class="sw-step rise-step" id="risestep-3">
+      <div class="sw-left">
+        <div class="sw-step-num">Step 4 of 4 — Elevation</div>
+        <div class="sw-step-title">Elevation</div>
+        <div class="sw-step-desc">Will this improve you, others, or both?<br><br><strong>1</strong> — Low elevation<br><strong>3</strong> — Moderate elevation<br><strong>5</strong> — High elevation<br><br><span class="main-questions">Main questions:</span> Will completing this improve me, another person, or both?</div>
+      </div>
+      <div class="rise-more-block">
+        <button class="sw-back-btn rise-more-btn" type="button" onclick="riseToggleMore(this)">+ More to consider</button>
+        <div class="rise-more-list" style="display:none;font-family:var(--font-b);font-size:13px;color:var(--ash);line-height:1.6">
+          Does it build discipline, courage, or wisdom? Strengthen a relationship? Help someone beyond yourself?
+        </div>
+      </div>
+      <div class="sw-options">
+        <button class="sw-opt-btn" data-val="1" onclick="riseSelect(3,1)">1</button>
+        <button class="sw-opt-btn" data-val="2" onclick="riseSelect(3,2)">2</button>
+        <button class="sw-opt-btn" data-val="3" onclick="riseSelect(3,3)">3</button>
+        <button class="sw-opt-btn" data-val="4" onclick="riseSelect(3,4)">4</button>
+        <button class="sw-opt-btn" data-val="5" onclick="riseSelect(3,5)">5</button>
+      </div>
+      <div class="sw-scale-anchors"><span>Low elevation</span><span>High elevation</span></div>
+    </div>
+    <div class="sw-summary" id="riseSummary" style="display:none">
+      <div class="sw-summary-score">
+        <div class="sw-summary-num" id="riseScoreNum">0</div>
+        <div class="sw-summary-band" id="riseScoreBand"></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:12px">
+        <span class="score-badge low" id="riseResultBadge">Standard Task</span>
+      </div>
+      <div class="sw-summary-breakdown">
+        <div class="sw-summary-item"><div class="sw-summary-item-lbl">Resistance</div><div class="sw-summary-item-val" id="riseBreakResistance">—</div></div>
+        <div class="sw-summary-item"><div class="sw-summary-item-lbl">Impact</div><div class="sw-summary-item-val" id="riseBreakImpact">—</div></div>
+        <div class="sw-summary-item"><div class="sw-summary-item-lbl">Stake</div><div class="sw-summary-item-val" id="riseBreakStake">—</div></div>
+        <div class="sw-summary-item"><div class="sw-summary-item-lbl">Elevation</div><div class="sw-summary-item-val" id="riseBreakElevation">—</div></div>
+      </div>
+      <div id="riseQualifiedSection" style="display:none;margin-bottom:14px;font-family:var(--font-b);font-size:14px;color:var(--charcoal);line-height:1.6">
+        This task qualifies as an Ascension Task. Choose a resistance pattern next.
+      </div>
+      <div id="riseStandardSection" style="display:none;margin-bottom:14px;font-family:var(--font-b);font-size:14px;color:var(--charcoal);line-height:1.6">
+        This is a Standard Task because resistance is too low or there is not enough importance, stake, or elevation.
+      </div>
+      <button class="sw-confirm-btn" id="riseSaveStandardBtn" onclick="riseConfirmStandard()">Save as Standard Task</button>
+      <button class="sw-next-btn" id="riseContinueBtn" style="display:none;" onclick="riseContinueFromSummary()">Continue →</button>
+    </div>
+    <div class="sw-step rise-step" id="risestep-5" style="display:none">
+      <div class="sw-left">
+        <div class="sw-step-num">Resistance Pattern</div>
+        <div class="sw-step-title">Resistance Pattern</div>
+        <div class="sw-step-desc">What’s really driving the avoidance? Tap your primary pattern, then optionally a secondary one.</div>
+      </div>
+      <div id="risePatternList" class="sw-options" style="flex-wrap:wrap;gap:6px;justify-content:flex-start"></div>
+    </div>
+    <div class="sw-step rise-step" id="risestep-6" style="display:none">
+      <div class="sw-left">
+        <div class="sw-step-num">Ascension Insight</div>
+        <div class="sw-step-title">Ascension Insight</div>
+        <div class="sw-step-desc">What is the real challenge behind this task? Focus on the underlying habit or mindset, not the task itself.</div>
+      </div>
+      <textarea id="riseInsightField" class="notes-area" placeholder="e.g. The challenge isn't writing the card — it's discomfort with grief and postponing acts of compassion." rows="4" style="margin-top:12px"></textarea>
+    </div>
+    <div class="sw-step rise-step" id="risestep-7" style="display:none">
+      <div class="sw-left">
+        <div class="sw-step-num">Recommended Action</div>
+        <div class="sw-step-title">Recommended Action</div>
+        <div class="sw-step-desc">Capture the smallest meaningful step, the next action, and the expected benefit.</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="reflection-q"><div class="reflection-q-num">Smallest Meaningful First Step</div><textarea id="riseFirstStep" class="notes-area" placeholder="Something you can do in 2–5 minutes" rows="3"></textarea></div>
+        <div class="reflection-q"><div class="reflection-q-num">Next Action</div><textarea id="riseNextAction" class="notes-area" placeholder="What needs to happen next" rows="3"></textarea></div>
+        <div class="reflection-q"><div class="reflection-q-num">Expected Benefit</div><textarea id="riseExpectedBenefit" class="notes-area" placeholder="What will be gained by completing this?" rows="3"></textarea></div>
+      </div>
+      <button class="sw-confirm-btn" onclick="riseSaveTask()">Save Ascension Task</button>
+    </div>
+    <div class="sw-actions" id="riseActions" style="display:flex">
+      <button class="sw-back-btn" id="riseBackBtn" onclick="riseBack()">← Back</button>
+      <button class="sw-next-btn" id="riseNextBtn" onclick="riseNext()">Next →</button>
     </div>
   </div>
 </div>
