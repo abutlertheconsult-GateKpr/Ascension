@@ -1765,9 +1765,19 @@ function buildFocusTaskCard(t){
   wrap.appendChild(bg);
   // Front card
   const card=document.createElement('div');card.className='swipe-front ftask-card';card.id='fc-'+t.id;
-  if(t.score >= 65 && t.riseScore >= 70){
+// --- PULSE ONLY ON TRUE TOP-TIER SCORES ---
+  if (t.score >= 1600) {
     card.classList.add('ambient-pulse');
   }
+  /*if (t.score && window.maxScore) {
+    // Flags the task if it's in the top 25% of your scoring scale
+    if (t.score >= (window.maxScore * 0.75)) {
+      card.classList.add('ambient-pulse');
+    }
+  } else if (t.score >= 75) {
+    // Fallback if maxScore isn't globally set yet
+    card.classList.add('ambient-pulse');
+  }*/
   const now=new Date();const dl=t.deadline?new Date(t.deadline+'T23:59:59'):null;
   const daysUntil=dl?Math.ceil((dl-now)/(1000*60*60*24)):null;
   let dlHtml='';
