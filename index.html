@@ -2195,6 +2195,24 @@ function generateAiPrompt(){
     const dateLabel=isNaN(date.getTime())?'Unknown date':date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
     return `- ${dateLabel}: ${t.name||'Unnamed task'} — ${t.riseInsight.trim()}`;
   });
+
+  // ═══ REFLECTION SUMMARY ═══
+  const reflectionFields = [
+    { q: "What caused the most friction today?", id: "reflection1" },
+    { q: "Where did you successfully push through resistance?", id: "reflection2" },
+    { q: "What did today's actions reveal about your current discipline or focus?", id: "reflection3" }
+  ];
+
+  const reflectionEntries = reflectionFields.map(field => {
+    const val = document.getElementById(field.id)?.value?.trim();
+    return val ? `Q: ${field.q}\n> ${val}` : null;
+  }).filter(Boolean);
+
+  const reflectionsSummary = reflectionEntries.length 
+    ? reflectionEntries.join('\n\n') 
+    : 'No reflections recorded for today yet.';
+  // ═════════════════════════════════════════════
+
   const tasksSummary=tasks.map(t=>{
     const r=t.riseScoreDetail?.resistance!=null?`R${t.riseScoreDetail.resistance}`:'R?';
     const i=t.riseScoreDetail?.impact!=null?`I${t.riseScoreDetail.impact}`:'I?';
@@ -2316,7 +2334,7 @@ If historical data is available or remembered from prior discussions, compare cu
 
 Keep all recommendations practical, specific, and grounded in the RISE data provided below.
 
-. I scored ${tasks.length} focus tasks in ${monthName} using the RISE method. The most frequent resistance patterns are: ${patternSummary}.\n\nMetrics:\n- Open tasks: ${openTasks}\n- Completed tasks: ${completed}\n- Deadlined completed tasks: ${deadlineTasks.length}\n- On time: ${onTime}\n- Last-minute: ${lastMinute}\n\nInsights by date:\n${insightEntries.length?insightEntries.join('\n'): 'No insights recorded yet.'}\n\nPlease summarize the resistance trends, identify the biggest contributors, recommend a simple action plan for reducing resistance and improving task completion, and include a short daily focus suggestion based on this RISE data.\n\nTask details:\n${tasksSummary}`;
+. I scored ${tasks.length} focus tasks in ${monthName} using the RISE method. The most frequent resistance patterns are: ${patternSummary}.\n\nMetrics:\n- Open tasks: ${openTasks}\n- Completed tasks: ${completed}\n- Deadlined completed tasks: ${deadlineTasks.length}\n- On time: ${onTime}\n- Last-minute: ${lastMinute}.\n\nEND OF DAY REFLECTIONS:\n${reflectionsSummary}\n\nInsights by date:\n${insightEntries.length?insightEntries.join('\n'): 'No insights recorded yet.'}\n\nPlease summarize the resistance trends, identify the biggest contributors, recommend a simple action plan for reducing resistance and improving task completion, and include a short daily focus suggestion based on this RISE data.\n\nTask details:\n${tasksSummary}`;
   const modalText=document.getElementById('aiPromptModalText');
   const modalMetrics=document.getElementById('aiPromptModalMetrics');
   if(modalText){modalText.value=prompt;}
